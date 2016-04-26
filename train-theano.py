@@ -1,12 +1,12 @@
-#! /usr/bin/env python
-
 import csv
 import itertools
-import nltk
 import sys
 import os
 import time
 from datetime import datetime
+
+import nltk
+
 from utils import *
 from rnn_theano import RNNTheano
 
@@ -22,14 +22,14 @@ def train_with_sgd(model, X_train, y_train, learning_rate=0.005, nepoch=1, evalu
     num_examples_seen = 0
     for epoch in range(nepoch):
         # Optionally evaluate the loss
-        if (epoch % evaluate_loss_after == 0):
+        if epoch % evaluate_loss_after == 0:
             loss = model.calculate_loss(X_train, y_train)
             losses.append((num_examples_seen, loss))
             time = datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
             print ("%s: Loss after num_examples_seen=%d epoch=%d: %f" % (time, num_examples_seen, epoch, loss))
             # Adjust the learning rate if loss increases
-            if (len(losses) > 1 and losses[-1][1] > losses[-2][1]):
-                learning_rate = learning_rate * 0.5  
+            if len(losses) > 1 and losses[-1][1] > losses[-2][1]:
+                learning_rate *= 0.5
                 print ("Setting learning rate to %f" % learning_rate)
             sys.stdout.flush()
             # ADDED! Saving model oarameters
